@@ -1,6 +1,6 @@
 {
-  "name": "graphql-to-jsonschema",
-  "version": "0.1.0",
+  "name": "graphql-to-json-schema",
+  "version": "1.0.0",
   "description": "Converts GraphQL Schema Definition to JSONSchema",
   "main": "index.js",
   "scripts": {

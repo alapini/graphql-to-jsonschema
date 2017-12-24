@@ -7,13 +7,13 @@ Converts GraphQL Schema Definition to JSONSchema
 ## Installation
 
 ```shell
-npm install graphql-to-jsonschema
+npm install graphql-to-json-schema
 ```
 
 ## Usage
 
 ```js
-  const transform = require('graphql-to-jsonschema');
+  const transform = require('graphql-to-json-schema');
 
   const schema = transform(`
     scalar Foo
