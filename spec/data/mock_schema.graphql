@@ -1,0 +1,26 @@
+scalar Foo
+
+union MyUnion = Foo | String | Float
+
+enum MyEnum {
+  FIRST_ITEM
+  SECOND_ITEM
+  THIRD_ITEM
+}
+
+type Stuff {
+  my_field: Int
+  req_field: String!
+  recursion: MoreStuff
+  custom_scalar: Foo
+  enum: MyEnum
+}
+
+type MoreStuff {
+  first: [Float]
+  identifier: [ID]!
+  reference: Stuff!
+  bool: Boolean!
+  union: MyUnion
+  with_params(param1: Int, param2: [Float]): Int
+}
