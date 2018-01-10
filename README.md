@@ -2,8 +2,8 @@
 [![](https://travis-ci.org/alapini/graphql-to-jsonschema.svg?branch=master)](https://travis-ci.org/alapini/graphql-to-jsonschema)
 
 Converts GraphQL Schema Definition to JSONSchema  
-**(Compatible with [mozilla-services/react-jsonschema-form](https://github.com/mozilla-services/react-jsonschema-form))**
 
+This repo is a fork of [jakubfiala/graphql-json-schema](https://github.com/jakubfiala/graphql-json-schema) but [mozilla-services/react-jsonschema-form](https://github.com/mozilla-services/react-jsonschema-form) compatible.
 ## Installation
 
 ```shell
