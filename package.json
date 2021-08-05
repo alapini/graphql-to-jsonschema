@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/alapini/graphql-to-jsonschema#readme",
   "dependencies": {
-    "graphql": "^0.10.1"
+    "graphql": "15.5.1"
   },
   "devDependencies": {
     "jasmine": "^2.6.0"

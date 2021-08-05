@@ -155,6 +155,11 @@ const getFields = (definition) => {
       type: "ENUM",
       oneOf: definition.values.map((v) => v.name.value),
     };
+  } else if (definition.kind === "SchemaDefinition") {
+    return {
+      title: definition.kind,
+      type: definition.kind,
+    };
   }
   return { richType: true, definition };
 };
