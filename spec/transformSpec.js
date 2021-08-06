@@ -1,5 +1,5 @@
 const transform = require("../index.js");
-const { toJSONFactory } = require("../transform.js");
+const { toJSON } = require("../transform.js");
 const fs = require("fs");
 const path = require("path");
 
@@ -36,9 +36,8 @@ describe("GraphQL to JSON Schema transform", () => {
   // });
 
   it("parses the product schema properly", () => {
-    const toJSON = toJSONFactory();
     const parsed = parse(mockGraphQLProduct);
-    const result = toJSON(parsed.definitions);
+    const result = toJSON(parsed.definitions, ["CreateProductInput"]);
     console.log("result", JSON.stringify(result, null, 2));
   });
 });

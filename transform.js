@@ -200,15 +200,15 @@ const getFields = (definition) => {
   return { type: definition.name.value, richType: true, definition };
 };
 
-const toJSONFactory = () => {
-  return (definitions) => {
-    const fields = definitions.map(getFields);
-    const typeDefs = fields.filter((f) => !f.richType);
-    const richTypes = fields.filter((f) => f.richType);
-    return richTypes
-      .filter((type) => ["SunglassVariantInput"].includes(type.type))
-      .map((type) => fieldToObject(type.definition, typeDefs, richTypes));
-  };
+const toJSON = (definitions, typesToInclude) => {
+  const fields = definitions.map(getFields);
+  const typeDefs = fields.filter((f) => !f.richType);
+  const richTypes = fields.filter((f) => f.richType);
+  return richTypes
+    .filter((type) =>
+      !typesToInclude ? true : typesToInclude.includes(type.type)
+    )
+    .map((type) => fieldToObject(type.definition, typeDefs, richTypes));
 };
 
 /**
@@ -234,5 +234,5 @@ const transform = (document) => {
 
 module.exports = {
   transform,
-  toJSONFactory,
+  toJSON,
 };
