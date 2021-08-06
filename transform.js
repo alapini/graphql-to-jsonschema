@@ -108,7 +108,7 @@ const typeToString = (type, typeDefs) => {
   if (!type.type) {
     for (const def of typeDefs) {
       if (def.title === type.name.value) {
-        return `${def.type}${
+        return `${def.type} ${def.title}${
           def.oneOf ? " (" + def.oneOf.join(", ") + ")" : ""
         }`;
       }
@@ -118,23 +118,59 @@ const typeToString = (type, typeDefs) => {
   return `${type.kind} ${typeToString(type.type, typeDefs)}`;
 };
 
-const fieldToDummyObject = (field, typeDefs) => {
+const findKnownType = (type, richTypes) => {
+  if (!type.type) {
+    for (const richType of richTypes) {
+      if (richType.type === type.name.value) {
+        return richType;
+      }
+    }
+    return undefined;
+  }
+  return findKnownType(type.type, richTypes);
+};
+
+const fieldToObject = (field, typeDefs, richTypes, returnFieldName) => {
   if (field.fields?.length) {
     const subfields = field.fields
       .map((f) => {
-        return fieldToDummyObject(f, typeDefs);
+        return fieldToObject(f, typeDefs, richTypes, true);
       })
       .reduce((obj, item) =>
         Object.assign(obj, {
           [Object.keys(item)[0]]: Object.values(item)[0],
         })
       );
-    return { [field.name.value]: subfields };
+
+    return returnFieldName ? { [field.name.value]: subfields } : subfields;
   }
-  const required = field.required ? " required" : "";
-  return {
-    [field.name.value]: `${typeToString(field.type, typeDefs)}${required}`,
-  };
+  const fullTypeDef = typeToString(field.type, typeDefs);
+  const knownType = findKnownType(field.type, richTypes);
+
+  if (knownType?.definition?.kind) {
+    const dataItem = fieldToObject(
+      knownType.definition,
+      typeDefs,
+      richTypes,
+      false
+    );
+    data = fullTypeDef.includes("ListType") ? [dataItem] : dataItem;
+  } else if (fullTypeDef.includes("Int")) {
+    data = 42;
+  } else if (fullTypeDef.includes("Boolean")) {
+    data = true;
+  } else if (fullTypeDef.includes("Float")) {
+    data = 0.42;
+  } else {
+    data = fullTypeDef;
+  }
+
+  if (returnFieldName) {
+    return {
+      [field.name.value]: data,
+    };
+  }
+  return data;
 };
 
 const getFields = (definition) => {
@@ -161,7 +197,7 @@ const getFields = (definition) => {
       type: definition.kind,
     };
   }
-  return { richType: true, definition };
+  return { type: definition.name.value, richType: true, definition };
 };
 
 const toJSONFactory = () => {
@@ -169,11 +205,12 @@ const toJSONFactory = () => {
     const fields = definitions.map(getFields);
     const typeDefs = fields.filter((f) => !f.richType);
     const richTypes = fields.filter((f) => f.richType);
-    return richTypes.map((type) =>
-      fieldToDummyObject(type.definition, typeDefs)
-    );
+    return richTypes
+      .filter((type) => ["SunglassVariantInput"].includes(type.type))
+      .map((type) => fieldToObject(type.definition, typeDefs, richTypes));
   };
 };
+
 /**
  * GQL -> JSON Schema transform
  *
