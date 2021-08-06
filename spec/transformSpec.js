@@ -35,7 +35,7 @@ describe("GraphQL to JSON Schema transform", () => {
   //   expect(mockJSONSchema).toEqual(transform(mockGraphQL));
   // });
 
-  it("parses the product schema properly", () => {
+  it("generated JSON for CreateProductInput", () => {
     const parsed = parse(mockGraphQLProduct);
     const result = toJSON(parsed.definitions, ["CreateProductInput"]);
     console.log("result", JSON.stringify(result, null, 2));
