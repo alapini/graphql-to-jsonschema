@@ -228,7 +228,7 @@ const transform = (document) => {
   for (let def of definitions) {
     schema.definitions[def.title] = def;
   }
-  // require('fs').writeFile('output.json', JSON.stringify(schema))
+  //require("fs").writeFile("output.json", JSON.stringify(schema));
   return schema;
 };
 
