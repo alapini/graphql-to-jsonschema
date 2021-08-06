@@ -39,6 +39,6 @@ describe("GraphQL to JSON Schema transform", () => {
     const toJSON = toJSONFactory();
     const parsed = parse(mockGraphQLProduct);
     const result = toJSON(parsed.definitions);
-    console.log("result", JSON.stringify(result));
+    console.log("result", JSON.stringify(result, null, 2));
   });
 });
